@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:pas_ui/login.dart';
 import 'package:sizer/sizer.dart';
+import 'package:provider/provider.dart';
+import 'package:pas_ui/main_provider.dart';
+
+import 'package:pas_ui/algorithm_renew/algorithm_renew.dart';
+import 'package:pas_ui/data_preprocessing/data_preprocess.dart';
+import 'package:pas_ui/offline_learning/offline_learning.dart';
+import 'package:pas_ui/online_analysis/online_analysis.dart';
+import 'package:pas_ui/system_login/login.dart';
+import 'package:pas_ui/project_setting/project_setting.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: PAS(),
+  runApp(ChangeNotifierProvider(
+    create: (context) => MainProvider(),
+    child: MaterialApp(
+      home: PAS(),
+    ),
   ));
 }
 
@@ -18,6 +29,15 @@ class PAS extends StatefulWidget {
 class _PASState extends State<PAS> {
   @override
   Widget build(BuildContext context) {
+    List pas = [
+      LoginPart(),
+      ProjectSetting(),
+      DataPreprocess(),
+      OfflineLearning(),
+      OnlineAnalysis(),
+      AlgorithmRenew()
+    ];
+
     return Scaffold(
       body: Sizer(builder: ((context, orientation, deviceType) {
         return Column(
@@ -61,7 +81,7 @@ class _PASState extends State<PAS> {
                 SizedBox(
                   width: 80.w,
                   height: 95.h,
-                  child: LoginPart(),
+                  child: pas[context.watch<MainProvider>().pageIndex],
                 )
               ],
             )
@@ -84,6 +104,30 @@ List<String> indexname = [
 ListView pageIndex = ListView.builder(
     itemCount: 6, // 총 6개
     itemBuilder: (context, index) {
+      // 상태를 가져옵니다.
+      var provider = context.watch<MainProvider>();
+      // 각 단계의 상태에 따라 색상을 결정합니다.
+      Color getColor(int index) {
+        switch (index) {
+          case 0:
+            return provider.isLogin ? Colors.lightGreen : Colors.white;
+          case 1:
+            return provider.isProjectSetting ? Colors.lightGreen : Colors.white;
+          case 2:
+            return provider.isPreprocess ? Colors.lightGreen : Colors.white;
+          case 3:
+            return provider.isOfflinelearning
+                ? Colors.lightGreen
+                : Colors.white;
+          case 4:
+            return provider.isOnlineanalysis ? Colors.lightGreen : Colors.white;
+          case 5:
+            return provider.isAlgorithmrenew ? Colors.lightGreen : Colors.white;
+          default:
+            return Colors.white;
+        }
+      }
+
       return Padding(
         padding: EdgeInsets.only(left: 1.w, top: 2.h, bottom: 2.h),
         child: Row(
@@ -91,14 +135,16 @@ ListView pageIndex = ListView.builder(
           children: [
             Icon(
               Icons.circle,
-              color: Colors.white,
+              color: getColor(index),
               size: 2.w,
             ),
             SizedBox(
               width: 1.w,
             ),
             TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.read<MainProvider>().pageIndex = index;
+                },
                 child: Text(
                   indexname[index],
                   style: TextStyle(fontSize: 5.sp, color: Colors.white),

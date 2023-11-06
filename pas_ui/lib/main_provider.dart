@@ -8,12 +8,20 @@ class MainProvider extends ChangeNotifier {
   bool _isOnlineanalysis = false;
   bool _isAlgorithmrenew = false;
 
+  int _pageIndex = 0;
+
   bool get isLogin => _isLogin;
   bool get isProjectSetting => _isProjectsetting;
-  bool get iSPreprocess => _isPreprocess;
+  bool get isPreprocess => _isPreprocess;
   bool get isOfflinelearning => _isOfflinelearning;
   bool get isOnlineanalysis => _isOnlineanalysis;
   bool get isAlgorithmrenew => _isAlgorithmrenew;
+  int get pageIndex => _pageIndex;
+
+  set pageIndex(int value) {
+    _pageIndex = value;
+    notifyListeners();
+  }
 
   set isLogin(bool value) {
     _isLogin = value;
