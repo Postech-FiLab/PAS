@@ -5,6 +5,6 @@ class ProjectSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("gdgd");
+    return Text("project");
   }
 }
