@@ -7,15 +7,8 @@ class ResearchProjectListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ResearchProjectSerializer
     
 class ProjectListAPIView(generics.ListAPIView):
+    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    
-    def get_queryset(self):
-        research_project_id = self.request.query_params.get('research_project')
-        return Project.objects.filter(research_project_id = research_project_id)
-    
-class ResearchProjectCreateAPIView(generics.CreateAPIView):
-    queryset = ResearchProject.objects.all()
-    serializer_class = ResearchProjectSerializer
 
 class ProjectCreateAPIView(generics.CreateAPIView):
     queryset = Project.objects.all()
