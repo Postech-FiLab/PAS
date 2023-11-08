@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class MainProvider extends ChangeNotifier {
+class MainViewModel extends ChangeNotifier {
   bool _isLogin = false;
   bool _isProjectsetting = false;
   bool _isPreprocess = false;

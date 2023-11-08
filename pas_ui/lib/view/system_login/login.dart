@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
-import 'package:pas_ui/main_provider.dart';
+import 'package:pas_ui/viewmodel/main_viewmodel.dart';
 
 final _idController = TextEditingController();
 final _passwordController = TextEditingController();
@@ -14,7 +14,7 @@ class LoginPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // MainProvider에서 로그인 상태를 가져옵니다.
-    final isLogin = context.watch<MainProvider>().isLogin;
+    final isLogin = context.watch<MainViewModel>().isLogin;
 
     // 로그인 상태에 따라 다른 위젯을 표시합니다.
     if (isLogin) {
@@ -63,7 +63,7 @@ class LoginPart extends StatelessWidget {
               if (_idController.text == 'filab' &&
                   _passwordController.text == 'filab1020') {
                 // Provider를 사용하여 로그인 상태를 true로 설정합니다.
-                context.read<MainProvider>().isLogin = true;
+                context.read<MainViewModel>().isLogin = true;
               } else {
                 // 로그인 실패 알림
                 ScaffoldMessenger.of(context).showSnackBar(
