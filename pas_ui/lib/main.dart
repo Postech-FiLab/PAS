@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
-import 'package:pas_ui/main_provider.dart';
+import 'package:pas_ui/viewmodel/main_viewmodel.dart';
 
-import 'package:pas_ui/algorithm_renew/algorithm_renew.dart';
-import 'package:pas_ui/data_preprocessing/data_preprocess.dart';
-import 'package:pas_ui/offline_learning/offline_learning.dart';
-import 'package:pas_ui/online_analysis/online_analysis.dart';
-import 'package:pas_ui/system_login/login.dart';
-import 'package:pas_ui/project_setting/project_setting.dart';
+import 'package:pas_ui/view/algorithm_renew/algorithm_renew.dart';
+import 'package:pas_ui/view/data_preprocessing/data_preprocess.dart';
+import 'package:pas_ui/view/offline_learning/offline_learning.dart';
+import 'package:pas_ui/view/online_analysis/online_analysis.dart';
+import 'package:pas_ui/view/system_login/login.dart';
+import 'package:pas_ui/view/project_setting/project_setting.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
-    create: (context) => MainProvider(),
+    create: (context) => MainViewModel(),
     child: MaterialApp(
       home: PAS(),
     ),
@@ -81,7 +81,7 @@ class _PASState extends State<PAS> {
                 SizedBox(
                   width: 80.w,
                   height: 95.h,
-                  child: pas[context.watch<MainProvider>().pageIndex],
+                  child: pas[context.watch<MainViewModel>().pageIndex],
                 )
               ],
             )
@@ -105,7 +105,7 @@ ListView pageIndex = ListView.builder(
     itemCount: 6, // 총 6개
     itemBuilder: (context, index) {
       // 상태를 가져옵니다.
-      var provider = context.watch<MainProvider>();
+      var provider = context.watch<MainViewModel>();
       // 각 단계의 상태에 따라 색상을 결정합니다.
       Color getColor(int index) {
         switch (index) {
@@ -143,7 +143,7 @@ ListView pageIndex = ListView.builder(
             ),
             TextButton(
                 onPressed: () {
-                  context.read<MainProvider>().pageIndex = index;
+                  context.read<MainViewModel>().pageIndex = index;
                 },
                 child: Text(
                   indexname[index],
