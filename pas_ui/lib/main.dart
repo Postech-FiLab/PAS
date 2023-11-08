@@ -58,7 +58,7 @@ class _PASState extends State<PAS> {
             Container(
               width: 100.w,
               height: 2.5.h,
-              color: const Color(0xffB2c629),
+              color: const Color(0xffC80150),
             ),
             Row(
               children: [
