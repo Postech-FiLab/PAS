@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
 import 'package:pas_ui/viewmodel/main_viewmodel.dart';
+import 'package:pas_ui/viewmodel/project_setting_viewmodel.dart';
 
 import 'package:pas_ui/view/algorithm_renew/algorithm_renew.dart';
 import 'package:pas_ui/view/data_preprocessing/data_preprocess.dart';
@@ -11,8 +12,11 @@ import 'package:pas_ui/view/system_login/login.dart';
 import 'package:pas_ui/view/project_setting/project_setting.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => MainViewModel(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => MainViewModel()),
+      ChangeNotifierProvider(create: (context) => ProjectSettingViewModel()),
+    ],
     child: MaterialApp(
       home: PAS(),
     ),
