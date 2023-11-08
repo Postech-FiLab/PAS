@@ -1,12 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:provider/provider.dart';
+import 'package:pas_ui/viewmodel/project_setting_viewmodel.dart';
 // 가로 : 80.w 높이 : 95.h
 
-class ProjectSetting extends StatelessWidget {
+class ProjectSetting extends StatefulWidget {
   const ProjectSetting({super.key});
 
   @override
+  State<ProjectSetting> createState() => _ProjectSettingState();
+}
+
+class _ProjectSettingState extends State<ProjectSetting> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      final viewModel =
+          Provider.of<ProjectSettingViewModel>(context, listen: false);
+      viewModel.fetchProjects();
+      viewModel.fetchResearchProjects();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final projectsettingViewModel = context.watch<ProjectSettingViewModel>();
+
+    if (projectsettingViewModel.projects.isEmpty &&
+        projectsettingViewModel.researchProjects.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: Column(
@@ -47,6 +73,36 @@ class ProjectSetting extends StatelessWidget {
                                     BorderSide(color: Colors.black, width: 1))),
                         width: 30.w,
                         height: 20.h,
+                        child: ListView.builder(
+                            itemCount:
+                                projectsettingViewModel.researchProjects.length,
+                            itemBuilder: (context, index) {
+                              final item = projectsettingViewModel
+                                  .researchProjects[index];
+                              return Container(
+                                color: projectsettingViewModel
+                                            .researchProjectIndex ==
+                                        index
+                                    ? Colors.grey
+                                    : Colors.white,
+                                child: ListTile(
+                                  title: Text(
+                                    item.researchName,
+                                    style: TextStyle(
+                                        color: projectsettingViewModel
+                                                    .researchProjectIndex ==
+                                                index
+                                            ? Colors.white
+                                            : Colors.black),
+                                  ),
+                                  onTap: () {
+                                    projectsettingViewModel
+                                        .researchProjectIndex = index;
+                                    projectsettingViewModel.projectIndex = 0;
+                                  },
+                                ),
+                              );
+                            }),
                       )
                     ],
                   ),
@@ -69,6 +125,31 @@ class ProjectSetting extends StatelessWidget {
                                     BorderSide(color: Colors.black, width: 1))),
                         width: 30.w,
                         height: 20.h,
+                        child: ListView.builder(
+                          itemCount:
+                              projectsettingViewModel.filteredProjects.length,
+                          itemBuilder: (context, index) {
+                            final project =
+                                projectsettingViewModel.filteredProjects[index];
+                            bool isSelected =
+                                index == projectsettingViewModel.projectIndex;
+                            return Container(
+                              color: isSelected ? Colors.grey : Colors.white,
+                              child: ListTile(
+                                title: Text(
+                                  project.modelName,
+                                  style: TextStyle(
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                                onTap: () {
+                                  projectsettingViewModel.projectIndex = index;
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       )
                     ],
                   )

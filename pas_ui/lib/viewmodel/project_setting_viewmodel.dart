@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:pas_ui/model/project_model.dart';
 import 'package:pas_ui/model/researchproject_model.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+// ignore: depend_on_referenced_packages
+import 'package:http/http.dart' as http;
 
-class ProjectViewModel extends ChangeNotifier {
+class ProjectSettingViewModel extends ChangeNotifier {
   List<Projects> projects = [];
   List<ResearchProjectModel> researchProjects = [];
+
+  int _researchProjectIndex = 0;
+  int _projectIndex = 0;
+
+  int get researchProjectIndex => _researchProjectIndex;
+  int get projectIndex => _projectIndex;
+
+  set researchProjectIndex(int value) {
+    _researchProjectIndex = value;
+    notifyListeners();
+  }
+
+  set projectIndex(int value) {
+    _projectIndex = value;
+    notifyListeners();
+  }
 
   Future<void> fetchProjects() async {
     final url = Uri.parse('http://127.0.0.1:8000/api/projects/');
@@ -50,5 +67,15 @@ class ProjectViewModel extends ChangeNotifier {
     }
 
     notifyListeners(); // 연구 프로젝트 데이터가 변경됐음을 알립니다.
+  }
+
+  List<Projects> get filteredProjects {
+    if (researchProjects.isNotEmpty && projects.isNotEmpty) {
+      final selectedResearchProject = researchProjects[researchProjectIndex];
+      return projects
+          .where((p) => p.researchProject == selectedResearchProject.researchId)
+          .toList();
+    }
+    return [];
   }
 }
