@@ -69,6 +69,25 @@ class ProjectSettingViewModel extends ChangeNotifier {
     notifyListeners(); // 연구 프로젝트 데이터가 변경됐음을 알립니다.
   }
 
+  Future<void> createResearchProject(
+      String name, String host, String port) async {
+    final url = Uri.parse('http://127.0.0.1:8000/api/research-projects/');
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({"name": name, "host": host, "port": port}),
+      );
+      if (response.statusCode == 200) {
+        print("성공");
+      } else {
+        throw "Server error with status code: ${response.statusCode}";
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   List<Projects> get filteredProjects {
     if (researchProjects.isNotEmpty && projects.isNotEmpty) {
       final selectedResearchProject = researchProjects[researchProjectIndex];

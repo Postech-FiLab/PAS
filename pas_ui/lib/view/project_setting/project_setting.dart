@@ -14,6 +14,10 @@ class ProjectSetting extends StatefulWidget {
 }
 
 class _ProjectSettingState extends State<ProjectSetting> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _hostController = TextEditingController();
+  final TextEditingController _portController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +28,21 @@ class _ProjectSettingState extends State<ProjectSetting> {
       viewModel.fetchProjects();
       viewModel.fetchResearchProjects();
     });
+  }
+
+  void createResearchProject() {
+    final viewModel =
+        Provider.of<ProjectSettingViewModel>(context, listen: false);
+    viewModel.createResearchProject(
+        _nameController.text, _hostController.text, _portController.text);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _hostController.dispose();
+    _portController.dispose();
+    super.dispose();
   }
 
   @override
@@ -218,7 +237,9 @@ class _ProjectSettingState extends State<ProjectSetting> {
                                           SizedBox(
                                             width: 15.w,
                                             height: 5.h,
-                                            child: TextField(),
+                                            child: TextField(
+                                              controller: _nameController,
+                                            ),
                                           )
                                         ],
                                       ),
@@ -238,7 +259,9 @@ class _ProjectSettingState extends State<ProjectSetting> {
                                           SizedBox(
                                             width: 15.w,
                                             height: 5.h,
-                                            child: TextField(),
+                                            child: TextField(
+                                              controller: _hostController,
+                                            ),
                                           )
                                         ],
                                       ),
@@ -258,7 +281,9 @@ class _ProjectSettingState extends State<ProjectSetting> {
                                           SizedBox(
                                             width: 15.w,
                                             height: 5.h,
-                                            child: TextField(),
+                                            child: TextField(
+                                              controller: _portController,
+                                            ),
                                           )
                                         ],
                                       ),
@@ -268,7 +293,7 @@ class _ProjectSettingState extends State<ProjectSetting> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: InkWell(
-                                          onTap: () {},
+                                          onTap: createResearchProject,
                                           child: Container(
                                             color: Colors.lightGreen,
                                             child: Padding(
